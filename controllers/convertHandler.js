@@ -96,9 +96,13 @@ function ConvertHandler() {
     let formatMatchPosition = cleaned.search(new RegExp(checkFormatPattern, 'i')),
         unitPosition = cleaned.search(new RegExp(checkUnitPattern, 'i'));
 
+    result.unit = cleaned.slice(unitPosition);
+
     if (formatMatchPosition === -1){
         // no match at all
-        if (unitPosition > 0) throw new Error(invalid_error[0]); // can detect unit, then number is the problem
+        if (unitPosition > 0 && valid_units.includes(result.unit.toLowerCase())) {
+            throw new Error(invalid_error[0]); // can detect unit, then number is the problem
+        }
         // can't detect unit, so both number and unit is the problem
         throw new Error(invalid_error[2]);
     }
@@ -116,7 +120,6 @@ function ConvertHandler() {
     } else {
         throw new Error(invalid_error[1]);
     }
-    result.unit = cleaned.slice(unitPosition);
 
     // last layer of validation
     //if (!valid_units.include(result.unit.toLowerCase())) return invalid_error[1];
