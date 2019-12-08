@@ -25,12 +25,17 @@ module.exports = function (app) {
         var returnNum = convertHandler.convert(initNum, initUnit);
         var returnUnit = convertHandler.getReturnUnit(initUnit);
         var toString = convertHandler.getString(initNum, initUnit, returnNum, returnUnit);
-        res.send(JSON.stringify(toString));
+        var result = {
+            initNum: initNum,
+            initUnit: initUnit,
+            returnNum: returnNum,
+            returnUnit: returnUnit,
+            string: toString,
+        }
+        res.json(result);
       } catch (err) {
         res.send(err.message);
       }
-
-      //res.json
     });
 
 };
