@@ -46,7 +46,7 @@ function ConvertHandler() {
       'kg': 'kilograms'
   },
 
-  invalid_error = ["number", "unit", "number and unit"];
+  invalid_error = ["invalid number", "invalid unit", "invalid number and unit"];
 
   function splitInputPart(input, type) {
     if (!["number", "unit"].includes(type)) {
