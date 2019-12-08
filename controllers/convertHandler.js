@@ -152,22 +152,22 @@ function ConvertHandler() {
 
     switch(initUnit){
         case 'gal':
-            return initNum / galToL;
-            break;
-        case 'l':
             return initNum * galToL;
             break;
-        case 'lbs':
-            return initNum / lbsToKg;
+        case 'l':
+            return initNum / galToL;
             break;
-        case 'kg':
+        case 'lbs':
             return initNum * lbsToKg;
             break;
+        case 'kg':
+            return initNum / lbsToKg;
+            break;
         case 'mi':
-            return initNum / miToKm;
+            return initNum * miToKm;
             break;
         case 'km':
-            return initNum * miToKm;
+            return initNum / miToKm;
             break;
     }
   };
