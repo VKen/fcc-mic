@@ -75,12 +75,12 @@ function ConvertHandler() {
                        + "("  // optional number-part group
                        +   "-?"  // optional negative number
                        +   "("  // optional fraction numerator
-                       +     "(\d+\.)?"  // optional prefix decimal group
-                       +     "\d+"  // integer or decimal place
-                       +   "\/"  //  fraction separator and start of fraction denominator group
+                       +     String.raw`(\d+\.)?`  // optional prefix decimal group
+                       +     String.raw`\d+`  // integer or decimal place
+                       +   String.raw`\/`  //  fraction separator and start of fraction denominator group
                        +   ")?"  // end optional fraction numerator group
-                       +   "(\d+\.)?" // optional prefix decimal group
-                       +   "\d+"  // integer or decimal place
+                       +   String.raw`(\d+\.)?` // optional prefix decimal group
+                       +   String.raw`\d+`  // integer or decimal place
                        + ")?",  // end optional number-part group
 
     checkFormatPattern = checkNumberPattern + checkUnitPattern;
