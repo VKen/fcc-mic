@@ -26,7 +26,9 @@ function ConvertHandler() {
    *
    *
    **/
-  const unit_conversion_map = {
+  const r = String.raw,  // for literal string-templating
+
+  unit_conversion_map = {
       'gal': 'l',
       'l': 'gal',
       'mi': 'km',
@@ -71,17 +73,23 @@ function ConvertHandler() {
 
     checkUnitPattern = "[a-z]+$", // unit at end of string
 
+    /*
     checkNumberPattern = "^"  // number part at start of string
-                       + "("  // optional number-part group
-                       +   "-?"  // optional negative number
-                       +   "("  // optional fraction numerator
-                       +     String.raw`(\d+\.)?`  // optional prefix decimal group
-                       +     String.raw`\d+`  // integer or decimal place
-                       +   String.raw`\/`  //  fraction separator and start of fraction denominator group
-                       +   ")?"  // end optional fraction numerator group
-                       +   String.raw`(\d+\.)?` // optional prefix decimal group
-                       +   String.raw`\d+`  // integer or decimal place
-                       + ")?",  // end optional number-part group
+                       + "(?:"  // optional non-capturing number-part group
+                       +   "(?:"  // optional non-capturing fraction numerator including `/`
+                       +     "("  // group #1 of numerator number
+                       +       r`(?:\d+\.)?`  // optional prefix decimal group including `.`
+                       +       r`\d+`  // integer or decimal place
+                       +     ")"  // end capturing group #1 of numerator number
+                       +     r`\/`  //  fraction separator and start of fraction denominator group
+                       +   ")?"  // end non-capturing optional fraction numerator group
+                       +   "("  // group #2 denominator group or number group
+                       +   r`(?:\d+\.)?` // optional non-capturing prefix decimal group
+                       +   r`\d+`  // integer or decimal place
+                       +   ")"  // end group #2 denominator group or number group
+                       + ")?",  // end optional non-capturing number-part group
+    */
+    checkNumberPattern = r`^(?:(?:((?:\d+\.)?\d+)\/)?((?:\d+\.)?\d+))?`,
 
     checkFormatPattern = checkNumberPattern + checkUnitPattern;
 
@@ -98,7 +106,13 @@ function ConvertHandler() {
     if (unitPosition === 0) {  // no numbr given, default to 1
         result.number = 1;
     } else if (unitPosition > 0 ){
-        result.number = cleaned.slice(0, unitPosition);
+        let numPart = cleaned.slice(0, unitPosition),
+        parseGroups = numPart.match(new RegExp(checkNumberPattern, 'i'))
+        if (parseGroups[1] !== undefined) {
+            result.number = parseFloat(parseGroups[1]) / parseFloat(parseGroups[2]);
+        } else {
+            result.number = parseFloat(numPart);
+        }
     } else {
         throw new Error(invalid_error[1]);
     }
