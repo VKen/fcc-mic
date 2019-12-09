@@ -142,7 +142,7 @@ function ConvertHandler() {
   };
 
   this.spellOutUnit = function(unit) {
-    return unit_language_map[unit];
+    return unit_language_map[unit.toLowerCase()];
   };
 
   this.convert = function(initNum, initUnit) {
@@ -150,7 +150,7 @@ function ConvertHandler() {
     const lbsToKg = 0.453592;
     const miToKm = 1.60934;
 
-    switch(initUnit){
+    switch(initUnit.toLowerCase()){
         case 'gal':
             return initNum * galToL;
             break;
